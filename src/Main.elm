@@ -6,7 +6,9 @@ import Filter exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onInput)
-import Navigation exposing (..)
+
+
+--import Navigation exposing (..)
 
 
 main =
@@ -22,11 +24,16 @@ main =
 -- MODEL
 
 
+type MenuTab
+    = AllCompanies
+    | AllContacts
+
+
 type alias Model =
     { companies : Companies.Model
     , contacts : Contacts.Model
     , filter : Filter.Model
-    , navigation : Navigation.Model
+    , currentTab : MenuTab
     }
 
 
@@ -39,7 +46,7 @@ initialModel =
     { companies = Companies.initialModel
     , contacts = Contacts.initialModel
     , filter = Filter.initialModel
-    , navigation = Navigation.initialModel
+    , currentTab = AllCompanies
     }
 
 
@@ -55,7 +62,7 @@ type Msg
     = FilterMsg Filter.Msg
     | CompaniesMsg Companies.Msg
     | ContactsMsg Contacts.Msg
-    | NavigationMsg Navigation.Msg
+    | ChangeTab MenuTab
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -82,12 +89,8 @@ update msg model =
             in
             ( { model | contacts = updatedContactsModel }, Cmd.map ContactsMsg contactsCmd )
 
-        NavigationMsg subMsg ->
-            let
-                updatedNavigationModel =
-                    Navigation.update subMsg model.navigation
-            in
-            ( { model | navigation = updatedNavigationModel }, Cmd.none )
+        ChangeTab newTab ->
+            ( { model | currentTab = newTab }, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
@@ -112,8 +115,55 @@ pageStyles =
 view : Model -> Html Msg
 view model =
     div [ Html.Attributes.style <| pageStyles ]
-        [ Html.map NavigationMsg (Navigation.headerView model.navigation)
-        , Html.map NavigationMsg Navigation.footerView
+        [ headerView model.currentTab
+        , footerView
         , Html.map FilterMsg (Filter.view model.filter)
-        , Html.map CompaniesMsg (Companies.view model.companies)
+        , bodyView model
         ]
+
+
+
+-- NAVIGATION
+
+
+headerView : MenuTab -> Html msg
+headerView tab =
+    let
+        title =
+            menuTabToString tab
+    in
+    h3 [] [ text title ]
+
+
+bodyView : Model -> Html Msg
+bodyView model =
+    let
+        innerList =
+            case model.currentTab of
+                AllCompanies ->
+                    Html.map CompaniesMsg (Companies.view model.filter.searchText model.companies)
+
+                AllContacts ->
+                    Html.map ContactsMsg (Contacts.view model.filter.searchText model.contacts)
+    in
+    div [ id "list-container" ] [ innerList ]
+
+
+footerView : Html Msg
+footerView =
+    div [ id "footer" ]
+        [ div [ id "btn-companies" ]
+            [ button [ onClick (ChangeTab AllCompanies) ] [ text "Companies" ] ]
+        , div [ id "btn-contacts" ]
+            [ button [ onClick (ChangeTab AllContacts) ] [ text "Contacts" ] ]
+        ]
+
+
+menuTabToString : MenuTab -> String
+menuTabToString tab =
+    case tab of
+        AllCompanies ->
+            "Companies"
+
+        AllContacts ->
+            "Contacts"

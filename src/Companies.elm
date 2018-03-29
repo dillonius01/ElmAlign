@@ -102,6 +102,9 @@ companyView company =
         ]
 
 
-view : Model -> Html msg
-view model =
-    div [ class "companiesList" ] (List.map companyView model.companies)
+view : String -> Model -> Html msg
+view filter model =
+    div []
+        [ span [] [ text ("current filter: " ++ filter) ]
+        , div [ class "companiesList" ] (List.map companyView model.companies)
+        ]

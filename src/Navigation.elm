@@ -51,6 +51,29 @@ update message model =
 -- VIEW
 
 
+headerView : Model -> Html msg
+headerView model =
+    let
+        title =
+            menuTabToString model.currentTab
+    in
+    h3 [] [ text title ]
+
+
+bodyView : Model -> Html msg
+bodyView model =
+    let
+        innerList =
+            case model.currentTab of
+                AllCompanies ->
+                    div [ id "all-companies" ] []
+
+                AllContacts ->
+                    div [ id "all-contacts" ] []
+    in
+    div [ id "list-container" ] [ innerList ]
+
+
 footerView : Html Msg
 footerView =
     div [ id "footer" ]
@@ -59,15 +82,6 @@ footerView =
         , div [ id "btn-contacts" ]
             [ button [ onClick (ChangeTab AllContacts) ] [ text "Contacts" ] ]
         ]
-
-
-headerView : Model -> Html msg
-headerView model =
-    let
-        title =
-            menuTabToString model.currentTab
-    in
-    h3 [] [ text title ]
 
 
 menuTabToString : MenuTab -> String

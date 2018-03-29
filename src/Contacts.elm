@@ -87,9 +87,12 @@ contactView contact =
         ]
 
 
-view : Model -> Html Msg
-view model =
-    div [ class "contactsList" ] (List.map contactView model.contacts)
+view : String -> Model -> Html Msg
+view filter model =
+    div []
+        [ span [] [ text ("current filter: " ++ filter) ]
+        , div [ class "contactsList" ] (List.map contactView model.contacts)
+        ]
 
 
 
