@@ -5,7 +5,6 @@ module Companies
         , Model
         , Msg
         , companyDecoder
-        , companyNameMatch
         , init
         , initialModel
         , matchCompany
@@ -17,8 +16,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Http
 import Json.Decode as JD exposing (Decoder, field, int, map3, string)
-import Regex exposing (caseInsensitive, contains, regex)
-import Utils exposing (makeApiEndpoint, matchString)
+import Utils exposing (makeApiEndpoint, matchAnyString)
 
 
 -- MODEL
@@ -110,14 +108,9 @@ view filter model =
     div [ class "companiesList" ] (List.filterMap (matchCompany filter) model.companies)
 
 
-companyNameMatch : Company -> String -> Bool
-companyNameMatch company searchText =
-    matchString searchText company.name
-
-
 matchCompany : String -> Company -> Maybe (Html msg)
 matchCompany searchText company =
-    if companyNameMatch company searchText then
+    if matchAnyString searchText [ company.name ] then
         Just (companyView company)
     else
         Nothing

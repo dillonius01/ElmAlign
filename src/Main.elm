@@ -5,10 +5,7 @@ import Contacts exposing (..)
 import Filter exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onClick, onInput)
-
-
---import Navigation exposing (..)
+import Html.Events exposing (onClick)
 
 
 main =
@@ -128,11 +125,7 @@ view model =
 
 headerView : MenuTab -> Html msg
 headerView tab =
-    let
-        title =
-            menuTabToString tab
-    in
-    h3 [] [ text title ]
+    h3 [] [ text (menuTabToString tab) ]
 
 
 bodyView : Model -> Html Msg

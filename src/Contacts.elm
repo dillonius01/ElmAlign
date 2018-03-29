@@ -9,13 +9,12 @@ module Contacts
         , view
         )
 
-import Companies exposing (Company, companyDecoder, companyNameMatch)
+import Companies exposing (Company, companyDecoder)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Http
 import Json.Decode as JD exposing (Decoder, bool, field, int, map5, string)
-import Regex exposing (caseInsensitive, contains, regex)
-import Utils exposing (makeApiEndpoint, matchString)
+import Utils exposing (makeApiEndpoint, matchAnyString)
 
 
 -- MODEL
@@ -95,7 +94,7 @@ view filter model =
 
 matchContact : String -> Contact -> Maybe (Html msg)
 matchContact searchText contact =
-    if matchString searchText contact.name || companyNameMatch contact.company searchText then
+    if matchAnyString searchText [ contact.name, contact.company.name ] then
         Just (contactView contact)
     else
         Nothing
