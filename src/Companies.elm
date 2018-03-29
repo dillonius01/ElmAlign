@@ -5,8 +5,10 @@ module Companies
         , Model
         , Msg
         , companyDecoder
+        , companyNameMatch
         , init
         , initialModel
+        , matchCompany
         , update
         , view
         )
@@ -15,7 +17,8 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Http
 import Json.Decode as JD exposing (Decoder, field, int, map3, string)
-import Utils exposing (makeApiEndpoint)
+import Regex exposing (caseInsensitive, contains, regex)
+import Utils exposing (makeApiEndpoint, matchString)
 
 
 -- MODEL
@@ -104,7 +107,17 @@ companyView company =
 
 view : String -> Model -> Html msg
 view filter model =
-    div []
-        [ span [] [ text ("current filter: " ++ filter) ]
-        , div [ class "companiesList" ] (List.map companyView model.companies)
-        ]
+    div [ class "companiesList" ] (List.filterMap (matchCompany filter) model.companies)
+
+
+companyNameMatch : Company -> String -> Bool
+companyNameMatch company searchText =
+    matchString searchText company.name
+
+
+matchCompany : String -> Company -> Maybe (Html msg)
+matchCompany searchText company =
+    if companyNameMatch company searchText then
+        Just (companyView company)
+    else
+        Nothing

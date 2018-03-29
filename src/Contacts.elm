@@ -9,12 +9,13 @@ module Contacts
         , view
         )
 
-import Companies exposing (Company, companyDecoder)
+import Companies exposing (Company, companyDecoder, companyNameMatch)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Http
 import Json.Decode as JD exposing (Decoder, bool, field, int, map5, string)
-import Utils exposing (makeApiEndpoint)
+import Regex exposing (caseInsensitive, contains, regex)
+import Utils exposing (makeApiEndpoint, matchString)
 
 
 -- MODEL
@@ -89,10 +90,15 @@ contactView contact =
 
 view : String -> Model -> Html Msg
 view filter model =
-    div []
-        [ span [] [ text ("current filter: " ++ filter) ]
-        , div [ class "contactsList" ] (List.map contactView model.contacts)
-        ]
+    div [ class "contactsList" ] (List.filterMap (matchContact filter) model.contacts)
+
+
+matchContact : String -> Contact -> Maybe (Html msg)
+matchContact searchText contact =
+    if matchString searchText contact.name || companyNameMatch contact.company searchText then
+        Just (contactView contact)
+    else
+        Nothing
 
 
 

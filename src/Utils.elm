@@ -1,9 +1,16 @@
 module Utils exposing (..)
 
+import Regex exposing (caseInsensitive, contains, regex)
+
 
 makeApiEndpoint : String -> String
 makeApiEndpoint resource =
     "https://shielded-everglades-49151.herokuapp.com/api/" ++ resource
+
+
+matchString : String -> String -> Bool
+matchString searchText toSearch =
+    contains (caseInsensitive <| regex searchText) toSearch
 
 
 
