@@ -1,18 +1,12 @@
 module Main exposing (..)
 
---import Filter.View exposing (filterView)
-
-import Companies.Rest exposing (companiesDecoder)
-import Companies.Types exposing (Companies, Company)
-import Companies.View exposing (companiesListView)
-import Contacts.Rest exposing (contactsDecoder)
-import Contacts.Types exposing (Contact, Contacts)
-import Filter.View exposing (filterView)
+import Companies exposing (..)
+import Contacts exposing (..)
+import Filter exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onInput)
-import Http
-import Json.Decode exposing (Decoder)
+import Navigation exposing (..)
 
 
 main =
@@ -29,10 +23,10 @@ main =
 
 
 type alias Model =
-    { companies : Companies
-    , contacts : Contacts
-    , errorMsg : String
-    , filter : String
+    { companies : Companies.Model
+    , contacts : Contacts.Model
+    , filter : Filter.Model
+    , navigation : Navigation.Model
     }
 
 
@@ -40,117 +34,60 @@ type alias Model =
 -- INIT
 
 
+initialModel : Model
+initialModel =
+    { companies = Companies.initialModel
+    , contacts = Contacts.initialModel
+    , filter = Filter.initialModel
+    , navigation = Navigation.initialModel
+    }
+
+
 init : ( Model, Cmd Msg )
 init =
-    let
-        model =
-            Model [] [] "" ""
-    in
-    model ! [ getAllCompanies, getAllContacts ]
+    initialModel
+        ! [ Cmd.map ContactsMsg Contacts.init
+          , Cmd.map CompaniesMsg Companies.init
+          ]
 
 
 type Msg
-    = SetFilter String
-    | AllCompanies (Result Http.Error Companies)
-    | AllContacts (Result Http.Error Contacts)
+    = FilterMsg Filter.Msg
+    | CompaniesMsg Companies.Msg
+    | ContactsMsg Contacts.Msg
+    | NavigationMsg Navigation.Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        SetFilter filter ->
-            ( { model | filter = filter }, Cmd.none )
+        FilterMsg subMsg ->
+            let
+                updatedFilterModel =
+                    Filter.update subMsg model.filter
+            in
+            ( { model | filter = updatedFilterModel }, Cmd.none )
 
-        AllCompanies (Ok companies) ->
-            ( { model | companies = companies, errorMsg = "" }, Cmd.none )
+        CompaniesMsg subMsg ->
+            let
+                ( updatedCompaniesModel, companiesCmd ) =
+                    Companies.update subMsg model.companies
+            in
+            ( { model | companies = updatedCompaniesModel }, Cmd.map CompaniesMsg companiesCmd )
 
-        AllCompanies (Err error) ->
-            ( { model | errorMsg = toString error }, Cmd.none )
+        ContactsMsg subMsg ->
+            let
+                ( updatedContactsModel, contactsCmd ) =
+                    Contacts.update subMsg model.contacts
+            in
+            ( { model | contacts = updatedContactsModel }, Cmd.map ContactsMsg contactsCmd )
 
-        AllContacts (Ok contacts) ->
-            ( { model | contacts = contacts, errorMsg = "" }, Cmd.none )
-
-        AllContacts (Err error) ->
-            ( { model | errorMsg = toString error }, Cmd.none )
-
-
-type SupportedResource
-    = GetAllCompanies
-    | GetAllContacts
-
-
-
----------------------
--- HELPER METHODOS --
----------------------
---fetchResource : SupportedResource -> Cmd Msg
---fetchResource resource =
---    let
---        url =
---            makeApiEndpoint resource
---        request =
---            Http.get url (getDecoder resource)
---    in
---    Http.send (getMsg resource) request
---getMsg : SupportedResource -> Result Http.Error Msg a
---getMsg resource =
---    case resource of
---        GetAllCompanies ->
---            AllCompanies
---        GetAllContacts ->
---            AllContacts
---getDecoder : SupportedResource -> Decoder a
---getDecoder resource =
---    case resource of
---        GetAllCompanies ->
---            companiesDecoder
---        GetAllContacts ->
---            contactsDecoder
----------------------
----- END METHODS  ---
----------------------
-
-
-getAllCompanies : Cmd Msg
-getAllCompanies =
-    let
-        url =
-            makeApiEndpoint GetAllCompanies
-
-        request =
-            Http.get url companiesDecoder
-    in
-    Http.send AllCompanies request
-
-
-getAllContacts : Cmd Msg
-getAllContacts =
-    let
-        url =
-            makeApiEndpoint GetAllContacts
-
-        request =
-            Http.get url contactsDecoder
-    in
-    Http.send AllContacts request
-
-
-makeApiEndpoint : SupportedResource -> String
-makeApiEndpoint resource =
-    let
-        endpoint =
-            case resource of
-                GetAllCompanies ->
-                    "companies"
-
-                GetAllContacts ->
-                    "contacts"
-    in
-    "https://shielded-everglades-49151.herokuapp.com/api/" ++ endpoint
-
-
-
--- SUBSCRIPTIONS
+        NavigationMsg subMsg ->
+            let
+                updatedNavigationModel =
+                    Navigation.update subMsg model.navigation
+            in
+            ( { model | navigation = updatedNavigationModel }, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
@@ -162,10 +99,21 @@ subscriptions model =
 -- VIEW
 
 
+pageStyles : List ( String, String )
+pageStyles =
+    [ ( "font-family", "Arial" )
+    , ( "padding", "1em 1em 0em 1em" )
+    , ( "width", "320px" )
+    , ( "float", "right" )
+    , ( "border", "2px solid grey" )
+    ]
+
+
 view : Model -> Html Msg
 view model =
-    div []
-        [ h3 [] [ text "Welcome to ElmAlign" ]
-        , filterView model.filter SetFilter
-        , companiesListView model.companies
+    div [ Html.Attributes.style <| pageStyles ]
+        [ Html.map NavigationMsg (Navigation.headerView model.navigation)
+        , Html.map NavigationMsg Navigation.footerView
+        , Html.map FilterMsg (Filter.view model.filter)
+        , Html.map CompaniesMsg (Companies.view model.companies)
         ]
