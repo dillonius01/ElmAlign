@@ -1,10 +1,10 @@
 {
     "version": "1.0.0",
-    "summary": "helpful summary of your project, less than 80 characters",
+    "summary": "Elm spike for the great DotAlign web tech throwdown of 2018",
     "repository": "https://github.com/dotalign/elmalign.git",
-    "license": "BSD3",
+    "license": "MIT",
     "source-directories": [
-        "."
+        "src"
     ],
     "exposed-modules": [],
     "dependencies": {
