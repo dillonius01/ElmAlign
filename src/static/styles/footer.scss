@@ -3,4 +3,20 @@
 	bottom: 0;
 	position: absolute;
 	width: $addin-width;
+	background-color: $da-blue;
+
+
+	.btn-container {
+		display: inline-block;
+		width: 50%;
+		text-align: center;
+		cursor: pointer;
+		vertical-align: middle;
+		padding: 16px 0;
+
+		i {
+			font-size: 3em;
+			color: $da-gray;
+		}
+	}
 }

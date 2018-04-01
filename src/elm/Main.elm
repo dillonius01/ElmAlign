@@ -144,10 +144,10 @@ bodyView model =
 footerView : Html Msg
 footerView =
     div [ class "footer" ]
-        [ div [ id "btn-companies" ]
-            [ button [ onClick (ChangeTab AllCompanies) ] [ text "Companies" ] ]
-        , div [ id "btn-contacts" ]
-            [ button [ onClick (ChangeTab AllContacts) ] [ text "Contacts" ] ]
+        [ div [ class "btn-container", onClick (ChangeTab AllCompanies) ]
+            [ i [ class "fas fa-building" ] [] ]
+        , div [ class "btn-container", onClick (ChangeTab AllContacts) ]
+            [ i [ class "fas fa-user" ] [] ]
         ]
 
 

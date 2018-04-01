@@ -45,11 +45,13 @@ update message model =
 view : Model -> Html Msg
 view model =
     div [ id "filter" ]
-        [ div [ class "ctn" ] []
-        , div [ class "ctn" ]
+        [ div [ class "ctn ctn-10" ]
+            [ i [ class "fas fa-search" ] []
+            ]
+        , div [ class "ctn ctn-80" ]
             [ input [ type_ "text", placeholder "filter", value model.searchText, onInput SetSearchText ] []
             ]
-        , div [ class "ctn" ]
-            [ button [ onClick Clear ] [ text "Clear" ]
+        , div [ class "ctn ctn-10", id "ctn-clear", onClick Clear ]
+            [ i [ class "fas fa-times" ] []
             ]
         ]
