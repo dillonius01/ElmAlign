@@ -98,20 +98,9 @@ subscriptions model =
 
 -- VIEW
 
-
-pageStyles : List ( String, String )
-pageStyles =
-    [ ( "font-family", "Arial" )
-    , ( "padding", "1em 1em 0em 1em" )
-    , ( "width", "320px" )
-    , ( "float", "right" )
-    , ( "border", "2px solid grey" )
-    ]
-
-
 view : Model -> Html Msg
 view model =
-    div [ Html.Attributes.style <| pageStyles ]
+    div [ ]
         [ headerView model.currentTab
         , footerView
         , Html.map FilterMsg (Filter.view model.filter)

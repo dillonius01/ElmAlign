@@ -16,7 +16,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Http
 import Json.Decode as JD exposing (Decoder, field, int, map3, string)
-import Utils exposing (makeApiEndpoint, matchAnyString)
+import Utils exposing (makeApiEndpoint, matchAnyString, sortByScoreDescending)
 
 
 -- MODEL
@@ -71,7 +71,7 @@ init =
         request =
             Http.get url companiesDecoder
     in
-    Http.send LoadAllCompanies request
+        Http.send LoadAllCompanies request
 
 
 
@@ -105,12 +105,27 @@ companyView company =
 
 view : String -> Model -> Html msg
 view filter model =
-    div [ class "companiesList" ] (List.filterMap (matchCompany filter) model.companies)
+    div [ class "companiesList" ] (generateCompanyList filter model.companies)
 
 
-matchCompany : String -> Company -> Maybe (Html msg)
-matchCompany searchText company =
-    if matchAnyString searchText [ company.name ] then
-        Just (companyView company)
-    else
-        Nothing
+generateCompanyList : String -> Companies -> List (Html msg)
+generateCompanyList filter companies =
+    companies
+        |> renderCompanies
+        << sortByScoreDescending
+        << matchCompanies filter
+
+
+renderCompanies : Companies -> List (Html msg)
+renderCompanies companies =
+    List.map companyView companies
+
+
+matchCompany : String -> Company -> Bool
+matchCompany filter company =
+    matchAnyString filter [ company.name ]
+
+
+matchCompanies : String -> Companies -> Companies
+matchCompanies filter companies =
+    List.filter (matchCompany filter) companies

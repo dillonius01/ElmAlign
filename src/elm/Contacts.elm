@@ -14,7 +14,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Http
 import Json.Decode as JD exposing (Decoder, bool, field, int, map5, string)
-import Utils exposing (makeApiEndpoint, matchAnyString)
+import Utils exposing (makeApiEndpoint, matchAnyString, sortByScoreDescending)
 
 
 -- MODEL
@@ -71,7 +71,7 @@ init =
         request =
             Http.get url contactsDecoder
     in
-    Http.send LoadAllContacts request
+        Http.send LoadAllContacts request
 
 
 
@@ -87,17 +87,32 @@ contactView contact =
         ]
 
 
-view : String -> Model -> Html Msg
+view : String -> Model -> Html msg
 view filter model =
-    div [ class "contactsList" ] (List.filterMap (matchContact filter) model.contacts)
+    div [ class "contactsList" ] (generateContactList filter model.contacts)
 
 
-matchContact : String -> Contact -> Maybe (Html msg)
+generateContactList : String -> Contacts -> List (Html msg)
+generateContactList filter contacts =
+    contacts
+        |> renderContacts
+        << sortByScoreDescending
+        << matchContacts filter
+
+
+renderContacts : Contacts -> List (Html msg)
+renderContacts contacts =
+    List.map contactView contacts
+
+
+matchContacts : String -> Contacts -> Contacts
+matchContacts filter contacts =
+    List.filter (matchContact filter) contacts
+
+
+matchContact : String -> Contact -> Bool
 matchContact searchText contact =
-    if matchAnyString searchText [ contact.name, contact.company.name ] then
-        Just (contactView contact)
-    else
-        Nothing
+    matchAnyString searchText [ contact.name, contact.company.name ]
 
 
 
