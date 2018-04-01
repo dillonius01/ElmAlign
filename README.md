@@ -1,7 +1,7 @@
 # ElmAlign
 
 ### About:
-The [Elm](http://elm-lang.org/)] version of a simple Contacts/Companies app.
+The [Elm](http://elm-lang.org/) version of a simple Contacts/Companies app.
 Built on top of the very handy [elm-webpack-starter](https://github.com/moarwick/elm-webpack-starter) scaffolding.
 
 
