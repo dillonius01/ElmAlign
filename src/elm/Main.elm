@@ -70,21 +70,21 @@ update msg model =
                 updatedFilterModel =
                     Filter.update subMsg model.filter
             in
-            ( { model | filter = updatedFilterModel }, Cmd.none )
+                ( { model | filter = updatedFilterModel }, Cmd.none )
 
         CompaniesMsg subMsg ->
             let
                 ( updatedCompaniesModel, companiesCmd ) =
                     Companies.update subMsg model.companies
             in
-            ( { model | companies = updatedCompaniesModel }, Cmd.map CompaniesMsg companiesCmd )
+                ( { model | companies = updatedCompaniesModel }, Cmd.map CompaniesMsg companiesCmd )
 
         ContactsMsg subMsg ->
             let
                 ( updatedContactsModel, contactsCmd ) =
                     Contacts.update subMsg model.contacts
             in
-            ( { model | contacts = updatedContactsModel }, Cmd.map ContactsMsg contactsCmd )
+                ( { model | contacts = updatedContactsModel }, Cmd.map ContactsMsg contactsCmd )
 
         ChangeTab newTab ->
             ( { model | currentTab = newTab }, Cmd.none )
@@ -98,13 +98,13 @@ subscriptions model =
 
 -- VIEW
 
+
 view : Model -> Html Msg
 view model =
-    div [ ]
-        [ headerView model.currentTab
-        , footerView
-        , Html.map FilterMsg (Filter.view model.filter)
+    div [ class "wrapper" ]
+        [ headerView model
         , bodyView model
+        , footerView
         ]
 
 
@@ -112,9 +112,19 @@ view model =
 -- NAVIGATION
 
 
-headerView : MenuTab -> Html msg
-headerView tab =
-    h3 [] [ text (menuTabToString tab) ]
+headerView : Model -> Html Msg
+headerView model =
+    div [ class "header" ]
+        [ titleView model.currentTab
+        , Html.map FilterMsg (Filter.view model.filter)
+        ]
+
+
+titleView : MenuTab -> Html msg
+titleView tab =
+    div [ id "title" ]
+        [ h3 [] [ text (menuTabToString tab) ]
+        ]
 
 
 bodyView : Model -> Html Msg
@@ -128,12 +138,12 @@ bodyView model =
                 AllContacts ->
                     Html.map ContactsMsg (Contacts.view model.filter.searchText model.contacts)
     in
-    div [ id "list-container" ] [ innerList ]
+        div [ class "content" ] [ innerList ]
 
 
 footerView : Html Msg
 footerView =
-    div [ id "footer" ]
+    div [ class "footer" ]
         [ div [ id "btn-companies" ]
             [ button [ onClick (ChangeTab AllCompanies) ] [ text "Companies" ] ]
         , div [ id "btn-contacts" ]

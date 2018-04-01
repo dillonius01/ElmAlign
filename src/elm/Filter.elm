@@ -45,6 +45,11 @@ update message model =
 view : Model -> Html Msg
 view model =
     div [ id "filter" ]
-        [ input [ type_ "text", placeholder "filter", value model.searchText, onInput SetSearchText ] []
-        , button [ onClick Clear ] [ text "Clear" ]
+        [ div [ class "ctn" ] []
+        , div [ class "ctn" ]
+            [ input [ type_ "text", placeholder "filter", value model.searchText, onInput SetSearchText ] []
+            ]
+        , div [ class "ctn" ]
+            [ button [ onClick Clear ] [ text "Clear" ]
+            ]
         ]

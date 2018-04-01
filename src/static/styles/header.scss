@@ -1,0 +1,22 @@
+.header {
+	top: 0;
+	height: $header-height;
+	width: $addin-width;
+	position: absolute;
+
+	#title {
+		text-align: center;
+		padding: 0.5em;
+	}
+
+
+
+	#filter {
+		.ctn {
+			display: inline-block;
+		}
+
+	}
+
+}
+
