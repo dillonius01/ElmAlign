@@ -1,5 +1,69 @@
 .content {
     overflow: auto;
-    padding: 1em;
+    padding-top: 0.2em;
     flex: 1;
+    background-color: $da-gray-light;
+
+
+    .list-inner-item {
+        margin-bottom: 0.2em;
+        background-color: white;
+     
+        .ctn-padded-group {
+            padding: 0.3em;
+        }
+
+        .ctn-top-group {
+            vertical-align: top;
+        }
+
+        .list-inner-ctn {
+            display: inline-block;
+
+
+            .ctn-text {
+                .item-name {
+                    font-size: 1em;
+                }
+            }
+
+
+            .ctn-score {
+                background-color: $da-blue;
+                color: white;
+                text-align: center;
+                width: 60%;
+                margin: 0 auto;
+                height: 1.7em;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+    }
+
+
+    .ctn-15 {
+        width: 15%;
+    }
+
+    .ctn-70 {
+        width: 70%;
+    }
+
+    .ctn-85 {
+        width: 85%;
+    }
+
+    .ctn-icon {
+        color: white;
+        background-color: $da-blue;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: $list-icon-size;
+        height: $list-icon-size;
+        width: $list-icon-size;
+    }
 }

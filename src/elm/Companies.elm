@@ -71,7 +71,7 @@ init =
         request =
             Http.get url companiesDecoder
     in
-        Http.send LoadAllCompanies request
+    Http.send LoadAllCompanies request
 
 
 
@@ -97,9 +97,21 @@ companiesDecoder =
 
 companyView : Company -> Html msg
 companyView company =
-    div [ class "company" ]
-        [ h3 [] [ text company.name ]
-        , span [] [ text <| toString company.score ]
+    div [ class "list-inner-item company" ]
+        [ div [ class "list-inner-ctn ctn-85 ctn-padded-group" ]
+            [ div [ class "list-inner-ctn ctn-15" ]
+                [ div [ class "ctn-icon" ]
+                    [ i [ class "fa fa-building" ] [] ]
+                ]
+            , div [ class "list-inner-ctn ctn-85" ]
+                [ div [ class "ctn-text" ]
+                    [ h4 [ class "item-name" ] [ text company.name ] ]
+                ]
+            ]
+        , div [ class "list-inner-ctn ctn-15 ctn-top-group" ]
+            [ div [ class "ctn-score" ]
+                [ span [] [ text <| toString company.score ] ]
+            ]
         ]
 
 
