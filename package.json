@@ -12,7 +12,8 @@
     "start": "webpack-dev-server --hot --inline",
     "prebuild": "rimraf dist",
     "build": "webpack",
-    "reinstall": "npm i rimraf && rimraf node_modules && npm uninstall -g elm && npm i -g elm && npm i && elm package install"
+    "reinstall": "npm i rimraf && rimraf node_modules && npm uninstall -g elm && npm i -g elm && npm i && elm package install",
+    "test": "elm-test"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.7",
@@ -20,6 +21,7 @@
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.27.3",
     "elm": "^0.18.0",
+    "elm-test": "^0.18.12",
     "elm-webpack-loader": "^4.3.0",
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.10.1",
@@ -33,5 +35,6 @@
     "webpack": "^2.3.1",
     "webpack-dev-server": "^2.4.2",
     "webpack-merge": "^4.1.0"
-  }
+  },
+  "dependencies": {}
 }
