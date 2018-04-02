@@ -8,6 +8,7 @@
     .list-inner-item {
         margin-bottom: 0.2em;
         background-color: white;
+        height: 3em;
      
         .ctn-padded-group {
             padding: 0.3em;
@@ -20,6 +21,12 @@
         .list-inner-ctn {
             display: inline-block;
 
+            .list-inner-flex {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+            }
 
             .ctn-text {
                 .item-name {
