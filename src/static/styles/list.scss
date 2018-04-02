@@ -76,4 +76,13 @@
         height: $list-icon-size;
         width: $list-icon-size;
     }
+
+    .no-results {
+        p {
+            font-style: italic;
+            font-size: 0.8em;
+            text-align: center;
+            color: $da-gray;
+        }
+    }
 }

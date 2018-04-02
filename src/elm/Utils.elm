@@ -3,6 +3,7 @@ module Utils
         ( listItemView
         , makeApiEndpoint
         , matchAnyString
+        , noResultsView
         , sortByScoreDescending
         , spinnerView
         )
@@ -30,6 +31,12 @@ type alias HasScore r =
     { r
         | score : Int
     }
+
+
+noResultsView : String -> Html msg
+noResultsView filter =
+    div [ class "no-results" ]
+        [ p [] [ text ("No results found for '" ++ filter ++ "'") ] ]
 
 
 spinnerView : Html msg

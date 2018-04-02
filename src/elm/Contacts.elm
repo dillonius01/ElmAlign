@@ -14,7 +14,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Http
 import Json.Decode as JD exposing (Decoder, bool, field, int, map5, string)
-import Utils exposing (listItemView, makeApiEndpoint, matchAnyString, sortByScoreDescending, spinnerView)
+import Utils exposing (listItemView, makeApiEndpoint, matchAnyString, noResultsView, sortByScoreDescending, spinnerView)
 
 
 -- MODEL
@@ -113,15 +113,19 @@ view filter model =
     if List.isEmpty model.contacts then
         spinnerView
     else
-        div [ class "contactsList" ] (generateContactList filter model.contacts)
+        generateContactList filter model.contacts
 
 
-generateContactList : String -> Contacts -> List (Html msg)
+generateContactList : String -> Contacts -> Html msg
 generateContactList filter contacts =
-    contacts
-        |> renderContacts
-        << sortByScoreDescending
-        << matchContacts filter
+    let
+        contactsList =
+            contacts |> sortByScoreDescending << matchContacts filter
+    in
+    if List.isEmpty contactsList then
+        noResultsView filter
+    else
+        div [ class "contactsList" ] (renderContacts contactsList)
 
 
 renderContacts : Contacts -> List (Html msg)
