@@ -14,8 +14,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Http
 import Json.Decode as JD exposing (Decoder, bool, field, int, map5, string)
-import Regex exposing (..)
-import Utils exposing (makeApiEndpoint, matchAnyString, sortByScoreDescending)
+import Utils exposing (listItemView, makeApiEndpoint, matchAnyString, sortByScoreDescending)
 
 
 -- MODEL
@@ -88,30 +87,25 @@ makeInitials contact =
         |> String.concat
 
 
+iconView : Contact -> Html msg
+iconView contact =
+    span [] [ text (makeInitials contact) ]
+
+
+textView : Contact -> List (Html msg)
+textView contact =
+    [ div [ class "ctn-text" ]
+        [ h4 [ class "item-name" ] [ text contact.name ]
+        ]
+    , div [ class "ctn-text" ]
+        [ h5 [ class "item-subtitle" ] [ text contact.company.name ]
+        ]
+    ]
+
+
 contactView : Contact -> Html msg
 contactView contact =
-    div [ class "list-inner-item contact" ]
-        [ div [ class "list-inner-ctn ctn-85 ctn-padded-group" ]
-            [ div [ class "list-inner-flex" ]
-                [ div [ class "list-inner-ctn ctn-15" ]
-                    [ div [ class "ctn-icon" ]
-                        [ span [] [ text (makeInitials contact) ] ]
-                    ]
-                , div [ class "list-inner-ctn ctn-85" ]
-                    [ div [ class "ctn-text" ]
-                        [ h4 [ class "item-name" ] [ text contact.name ]
-                        ]
-                    , div [ class "ctn-text" ]
-                        [ h5 [ class "item-subtitle" ] [ text contact.company.name ]
-                        ]
-                    ]
-                ]
-            ]
-        , div [ class "list-inner-ctn ctn-15 ctn-top-group" ]
-            [ div [ class "ctn-score" ]
-                [ span [] [ text <| toString contact.score ] ]
-            ]
-        ]
+    listItemView contact (iconView contact) (textView contact)
 
 
 view : String -> Model -> Html msg

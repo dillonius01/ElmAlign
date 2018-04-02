@@ -16,7 +16,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Http
 import Json.Decode as JD exposing (Decoder, field, int, map3, string)
-import Utils exposing (makeApiEndpoint, matchAnyString, sortByScoreDescending)
+import Utils exposing (listItemView, makeApiEndpoint, matchAnyString, sortByScoreDescending)
 
 
 -- MODEL
@@ -95,26 +95,22 @@ companiesDecoder =
 -- VIEW
 
 
+iconView : Html msg
+iconView =
+    i [ class "fa fa-building" ] []
+
+
+textView : Company -> List (Html msg)
+textView company =
+    [ div [ class "ctn-text" ]
+        [ h4 [ class "item-name" ] [ text company.name ]
+        ]
+    ]
+
+
 companyView : Company -> Html msg
 companyView company =
-    div [ class "list-inner-item company" ]
-        [ div [ class "list-inner-ctn ctn-85 ctn-padded-group" ]
-            [ div [ class "list-inner-flex" ]
-                [ div [ class "list-inner-ctn ctn-15" ]
-                    [ div [ class "ctn-icon" ]
-                        [ i [ class "fa fa-building" ] [] ]
-                    ]
-                , div [ class "list-inner-ctn ctn-85" ]
-                    [ div [ class "ctn-text" ]
-                        [ h4 [ class "item-name" ] [ text company.name ] ]
-                    ]
-                ]
-            ]
-        , div [ class "list-inner-ctn ctn-15 ctn-top-group" ]
-            [ div [ class "ctn-score" ]
-                [ span [] [ text <| toString company.score ] ]
-            ]
-        ]
+    listItemView company iconView (textView company)
 
 
 view : String -> Model -> Html msg
