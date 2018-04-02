@@ -1,11 +1,5 @@
 .content {
-    top: $header-height;
-    bottom: $footer-height;
     overflow: auto;
-    position: absolute;
-    width: $addin-width;
     padding: 1em;
-
-    
-    
+    flex: 1;
 }

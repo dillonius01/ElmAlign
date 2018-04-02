@@ -1,15 +1,22 @@
-body {
+body, html {
 	font-family: "Arial";
 	height: 100%;
 	margin: 0;
 
+	#main {
+		height: 100%;
 
-	.wrapper {
-		float: right;
-		width: $addin-width;
-	}
+		.wrapper {
+			float: right;
+			width: $addin-width;
+			display: flex;
+			flex-direction: column;
+			border: 5px solid $da-gray-light;
+			height: 100%;
+		}
 
-	h1, h2, h3, h4, h5, h6, p {
-		margin: 0;
+		h1, h2, h3, h4, h5, h6, p {
+			margin: 0;
+		}
 	}
 }

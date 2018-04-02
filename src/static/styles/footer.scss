@@ -1,22 +1,30 @@
 .footer {
 	height: $footer-height;
-	bottom: 0;
-	position: absolute;
-	width: $addin-width;
-	background-color: $da-blue;
 
 
 	.btn-container {
+		background-color: $da-blue;
 		display: inline-block;
 		width: 50%;
 		text-align: center;
 		cursor: pointer;
 		vertical-align: middle;
 		padding: 18px 0;
+		transition: background-color 0.3s ease;
 
 		i {
 			font-size: 3em;
 			color: white;
+			transition: color 0.3s ease;
 		}
+	}
+
+	.btn-container:hover {
+		background-color: $da-blue-semidark;
+
+		i {
+			color: $da-gray-light;
+		}
+
 	}
 }
