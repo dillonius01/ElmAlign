@@ -16,7 +16,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Http
 import Json.Decode as JD exposing (Decoder, field, int, map3, string)
-import Utils exposing (listItemView, makeApiEndpoint, matchAnyString, sortByScoreDescending)
+import Utils exposing (listItemView, makeApiEndpoint, matchAnyString, sortByScoreDescending, spinnerView)
 
 
 -- MODEL
@@ -115,7 +115,10 @@ companyView company =
 
 view : String -> Model -> Html msg
 view filter model =
-    div [ class "companiesList" ] (generateCompanyList filter model.companies)
+    if List.isEmpty model.companies then
+        spinnerView
+    else
+        div [ class "companiesList" ] (generateCompanyList filter model.companies)
 
 
 generateCompanyList : String -> Companies -> List (Html msg)

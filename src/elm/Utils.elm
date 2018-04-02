@@ -4,6 +4,7 @@ module Utils
         , makeApiEndpoint
         , matchAnyString
         , sortByScoreDescending
+        , spinnerView
         )
 
 import Html exposing (..)
@@ -29,6 +30,15 @@ type alias HasScore r =
     { r
         | score : Int
     }
+
+
+spinnerView : Html msg
+spinnerView =
+    div [ class "loading-spinner" ]
+        [ div [ class "spinner-kid" ]
+            [ i [ class "fas fa-spinner fa-pulse" ] []
+            ]
+        ]
 
 
 listItemView : HasScore r -> Html msg -> List (Html msg) -> Html msg
