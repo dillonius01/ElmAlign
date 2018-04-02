@@ -29,6 +29,20 @@ npm start
 * Browser will refresh automatically on any file changes..
 
 
+### Run unit tests:
+```
+npm test
+```
+
+* You may need to have `elm-test` installed globally
+* To do so, run
+
+```
+npm i -g elm-test
+```
+
+
+
 ### Build & bundle for prod:
 ```
 npm run build
