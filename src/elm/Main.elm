@@ -70,21 +70,21 @@ update msg model =
                 updatedFilterModel =
                     Filter.update subMsg model.filter
             in
-                ( { model | filter = updatedFilterModel }, Cmd.none )
+            ( { model | filter = updatedFilterModel }, Cmd.none )
 
         CompaniesMsg subMsg ->
             let
                 ( updatedCompaniesModel, companiesCmd ) =
                     Companies.update subMsg model.companies
             in
-                ( { model | companies = updatedCompaniesModel }, Cmd.map CompaniesMsg companiesCmd )
+            ( { model | companies = updatedCompaniesModel }, Cmd.map CompaniesMsg companiesCmd )
 
         ContactsMsg subMsg ->
             let
                 ( updatedContactsModel, contactsCmd ) =
                     Contacts.update subMsg model.contacts
             in
-                ( { model | contacts = updatedContactsModel }, Cmd.map ContactsMsg contactsCmd )
+            ( { model | contacts = updatedContactsModel }, Cmd.map ContactsMsg contactsCmd )
 
         ChangeTab newTab ->
             ( { model | currentTab = newTab }, Cmd.none )
@@ -115,8 +115,8 @@ view model =
 headerView : Model -> Html Msg
 headerView model =
     div [ class "header" ]
-        [ titleView model.currentTab
-        , Html.map FilterMsg (Filter.view model.filter)
+        [ div [ class "header-item-container" ] [ titleView model.currentTab ]
+        , div [ class "header-item-container" ] [ Html.map FilterMsg (Filter.view model.filter) ]
         ]
 
 
@@ -138,7 +138,7 @@ bodyView model =
                 AllContacts ->
                     Html.map ContactsMsg (Contacts.view model.filter.searchText model.contacts)
     in
-        div [ class "content" ] [ innerList ]
+    div [ class "content" ] [ innerList ]
 
 
 footerView : Html Msg
