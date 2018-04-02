@@ -14,6 +14,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Http
 import Json.Decode as JD exposing (Decoder, bool, field, int, map5, string)
+import Regex exposing (..)
 import Utils exposing (makeApiEndpoint, matchAnyString, sortByScoreDescending)
 
 
@@ -71,19 +72,41 @@ init =
         request =
             Http.get url contactsDecoder
     in
-        Http.send LoadAllContacts request
+    Http.send LoadAllContacts request
 
 
 
 -- VIEW
 
 
+makeInitials : Contact -> String
+makeInitials contact =
+    contact.name
+        |> String.trim
+        |> String.split " "
+        |> List.map (String.left 1)
+        |> String.concat
+
+
 contactView : Contact -> Html msg
 contactView contact =
-    div [ class "contact" ]
-        [ h3 [] [ text contact.name ]
-        , span [] [ text contact.company.name ]
-        , span [] [ text <| toString contact.score ]
+    div [ class "list-inner-item contact" ]
+        [ div [ class "list-inner-ctn ctn-85 ctn-padded-group" ]
+            [ div [ class "list-inner-ctn ctn-15" ]
+                [ div [ class "ctn-icon" ]
+                    [ span [] [ text (makeInitials contact) ] ]
+                ]
+            , div [ class "list-inner-ctn ctn-85" ]
+                [ div [ class "ctn-text" ]
+                    [ h4 [ class "item-name" ] [ text contact.name ]
+                    , h5 [ class "item-subtitle" ] [ text contact.company.name ]
+                    ]
+                ]
+            ]
+        , div [ class "list-inner-ctn ctn-15 ctn-top-group" ]
+            [ div [ class "ctn-score" ]
+                [ span [] [ text <| toString contact.score ] ]
+            ]
         ]
 
 
